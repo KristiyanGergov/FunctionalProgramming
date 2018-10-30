@@ -1,12 +1,16 @@
 #lang racket
-(define (fact-iter product counter max-count)
+
+(define (factorial-iter num)
+  (define (fact-iter product counter max-count)
   (if (> counter max-count)
       product
       (fact-iter (* counter product)
                  (+ counter 1)
-                 max-count)))
-(define (factorial-iter num)
-    (fact-iter 1 1 num))
+                 max-count))
+    )
+  
+    (fact-iter 1 1 num)
+  )
 
 (require rackunit rackunit/text-ui)
 
