@@ -1,3 +1,19 @@
+#lang racket
+
+(define (expt x n)
+    (cond [(> n 0) (* x (expt x (- n 1)))]
+          [(< n 0) (* (/ 1 x) (expt (/ 1 x) (- (- n) 1)))]
+          [else 1]
+          )
+    )
+
+(define (fast-expt x n)
+    (if (= (remainder n 2) 0)
+        (expt (expt x (/ n 2)) 2)
+        (expt x n)
+        )
+    )
+
 (require rackunit rackunit/text-ui)
 
 (define fast-expt-tests
