@@ -1,6 +1,5 @@
 module Animals where
 
-
 data BloodType = Cold_Blooded | Warm_Blooded   
            deriving (Eq, Show, Read, Enum)  
 
@@ -9,7 +8,7 @@ data AnimalType = Fish | Invertebrate | Amphibian | Reptile | Bird | Mammal
 
 allBloodTypes = [Cold_Blooded .. ]
 allAnimalTypes = [Fish .. ]
-
+specialQuestions = []
 
 data Animal = Animal {
   name :: String,
