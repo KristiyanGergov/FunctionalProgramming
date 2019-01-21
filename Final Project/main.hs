@@ -20,7 +20,7 @@ checkType currentAnimals currentTypes criteria "No" = do
     else
       checkType currentAnimals (tail currentTypes) criteria answer      
 
-checkAnimal currentAnimals currentQuestions = do
+checkAnimal currentAnimals = do
     let current = (head currentAnimals)
     let question = "Is it " ++ (name current) ++ "? (Yes/No)"
     putStrLn question 
@@ -40,13 +40,10 @@ checkAnimal currentAnimals currentQuestions = do
           putStrLn questionToDistinguish
           newQuestion <- getLine
           
-          let writingDownAnswer = "Writing down \"" ++ (head (currentQuestions ++ [newQuestion])) ++ "\""
-          putStrLn writingDownAnswer
-          
           let newAnimal = Animal { name = answer, bloodType = (bloodType current), animalType = (animalType current), questions = [newQuestion] }
           return (animals ++ [newAnimal])
     else    
-        checkAnimal (tail currentAnimals) currentQuestions       
+        checkAnimal (tail currentAnimals)       
 
 
 checkQuestions [] = do
@@ -61,43 +58,42 @@ checkQuestions currentAnimals = do
       
       if answer == "Yes"
        then do
-        putStrLn "Qko"
         return (filter (\animal -> questions animal == currentAnimalQuestions) currentAnimals) 
        else
         checkQuestions (tail currentAnimals) 
   else
     checkQuestions (tail currentAnimals)
 
+oneMore answer = do
+  putStrLn "One more? (Yes/No)"
+
+  oneMore <- getLine
+
+  if oneMore == "Yes"
+    then do
+      if (tail answer == [])
+        then do
+          start animals
+      else
+        start answer
+  else
+    putStrLn "Bye!"   
     
-start :: [Animal] -> [String] -> IO()
-start animals currentQuestions = do 
+start :: [Animal] -> IO()
+start animals = do 
   animalsFilteredByBloodType <- checkType animals allBloodTypes bloodType "No"
   
   animalsFilteredByAnimalType <- checkType animalsFilteredByBloodType allAnimalTypes animalType "No"
 
   animalsFilteredByQuestions <- checkQuestions animalsFilteredByAnimalType
 
-  if animalsFilteredByQuestions /= []
+  if animalsFilteredByQuestions == []
     then do
-      answer <- checkAnimal animalsFilteredByQuestions specialQuestions
-      putStr "ok"
-    else
-    putStrLn "So sad"
+      answer <- checkAnimal animalsFilteredByAnimalType
+      oneMore answer
+    else 
+      do
+        answer <- checkAnimal animalsFilteredByQuestions 
+        oneMore answer
 
-  putStrLn "One more? (Yes/No)"
-
-  -- oneMore <- getLine
-
-
-
-  -- if oneMore == "Yes"
-  --   then do
-  --     if (tail answer == [])
-  --       then do
-  --         start animals currentQuestions
-  --     else
-  --       start answer currentQuestions
-  -- else
-  --   putStrLn "Bye!"
-
-main = start animals specialQuestions
+main = start animals

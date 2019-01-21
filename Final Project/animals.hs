@@ -8,7 +8,6 @@ data AnimalType = Fish | Invertebrate | Amphibian | Reptile | Bird | Mammal
 
 allBloodTypes = [Cold_Blooded .. ]
 allAnimalTypes = [Fish .. ]
-specialQuestions = []
 
 data Animal = Animal {
   name :: String,
@@ -25,8 +24,11 @@ animals = [
   Animal { name = "Lizard", bloodType = Cold_Blooded, animalType = Reptile , questions = []},
   Animal { name = "Snake", bloodType = Cold_Blooded, animalType = Reptile, questions = []},
   Animal { name = "Frog", bloodType = Cold_Blooded, animalType = Amphibian, questions = []},
+  Animal { name = "Snail", bloodType = Cold_Blooded, animalType = Invertebrate, questions = []},
   Animal { name = "Swordfish", bloodType = Cold_Blooded, animalType = Fish, questions = []},
   Animal { name = "Dolphin", bloodType = Warm_Blooded, animalType = Mammal, questions = []},
+  Animal { name = "Opah", bloodType = Warm_Blooded, animalType = Fish, questions = []},
+  Animal { name = "Eagle", bloodType = Warm_Blooded, animalType = Bird, questions = []},
   Animal { name = "Elephant", bloodType = Warm_Blooded, animalType = Mammal, questions = []},
   Animal { name = "Bear", bloodType = Warm_Blooded, animalType = Mammal, questions = []},
   Animal { name = "Rhino", bloodType = Warm_Blooded, animalType = Mammal, questions = []}
