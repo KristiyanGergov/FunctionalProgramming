@@ -1,36 +1,5 @@
-data BloodType = Cold_Blooded | Warm_Blooded   
-           deriving (Eq, Show, Read, Enum)  
+import Animals
 
-data AnimalType = Fish | Invertebrate | Amphibian | Reptile | Bird | Mammal           
-           deriving (Eq, Show, Read, Enum)  
-
-allBloodTypes = [Cold_Blooded .. ]
-allAnimalTypes = [Fish .. ]
-specialQuestions = []
-
-data Animal = Animal {
-  name :: String,
-  bloodType :: BloodType,
-  animalType :: AnimalType,
-  questions :: [String]
-} deriving (Eq, Show, Read)
-
-animals = [
-  Animal { name = "Cat", bloodType = Warm_Blooded, animalType = Mammal      , questions = []},
-  Animal { name = "Dog", bloodType = Warm_Blooded, animalType = Mammal      , questions = []},
-  Animal { name = "Pig", bloodType = Warm_Blooded, animalType = Mammal      , questions = []},
-  Animal { name = "Pigeon", bloodType = Warm_Blooded, animalType = Bird     , questions = []},
-  Animal { name = "Lizard", bloodType = Cold_Blooded, animalType = Reptile  , questions = []},
-  Animal { name = "Snake", bloodType = Cold_Blooded, animalType = Reptile   , questions = []},
-  Animal { name = "Frog", bloodType = Cold_Blooded, animalType = Amphibian  , questions = []},
-  Animal { name = "Swordfish", bloodType = Cold_Blooded, animalType = Fish  , questions = []},
-  Animal { name = "Dolphin", bloodType = Warm_Blooded, animalType = Mammal  , questions = []},
-  Animal { name = "Elephant", bloodType = Warm_Blooded, animalType = Mammal , questions = []},
-  Animal { name = "Bear", bloodType = Warm_Blooded, animalType = Mammal     , questions = []},
-  Animal { name = "Rhino", bloodType = Warm_Blooded, animalType = Mammal    , questions = []}
-  ]
-
-  
 checkType _ [] _ _ = do 
   putStrLn "I give up. What type is it?"
   answer <- getLine
@@ -51,22 +20,32 @@ checkType currentAnimals currentTypes criteria "No" = do
     else
       checkType currentAnimals (tail currentTypes) criteria answer      
 
-checkAnimal :: [Animal] -> IO ()
-checkAnimal [] = do
-     putStrLn "I give up. What is it?"
-     answer <- getLine
-     putStrLn answer
-
 checkAnimal x = do
-    let question = "Is it " ++ (name (head x)) ++ "?"
+    let current = (head x)
+    let question = "Is it " ++ (name current) ++ "?"
     putStrLn question 
     answer <- getLine
     
     if answer == "Yes"
         then do
             putStrLn "Great!"
-    else
+            return (head x)
+    else if (length x) == 1
+        then do
+          putStrLn "I give up. What is it?"
+          answer <- getLine
+          
+          let questionToDistinguish = "How do I distinguish " ++ answer ++ " from " ++ (name current) ++ "?"
+          putStrLn questionToDistinguish
+          newQuestion <- getLine
+          let newAnimal = Animal { name = answer, bloodType = (bloodType current), animalType = (animalType current), questions = [newQuestion] }
+          return newAnimal
+    else    
         checkAnimal (tail x)        
+
+addAnimal x = do
+  let gosho = read x
+  animals ++ gosho
 
 main = do 
   animalsFilteredByBloodType <- checkType animals allBloodTypes bloodType "No"
@@ -75,4 +54,6 @@ main = do
 
   answer <- checkAnimal animalsFilteredByAnimalType
 
-  putStrLn (show answer)
+  -- let test = Animal { name = answer, bloodType = (bloodType current), animalType = (animalType current), questions = [] }
+
+  putStrLn (show (name answer))
