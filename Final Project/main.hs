@@ -29,7 +29,7 @@ checkAnimal x = do
     if answer == "Yes"
         then do
             putStrLn "Great!"
-            return (head x)
+            return [(head x)]
     else if (length x) == 1
         then do
           putStrLn "I give up. What is it?"
@@ -37,23 +37,34 @@ checkAnimal x = do
           
           let questionToDistinguish = "How do I distinguish " ++ answer ++ " from " ++ (name current) ++ "?"
           putStrLn questionToDistinguish
+          
           newQuestion <- getLine
           let newAnimal = Animal { name = answer, bloodType = (bloodType current), animalType = (animalType current), questions = [newQuestion] }
-          return newAnimal
+          return (animals ++ [newAnimal])
     else    
         checkAnimal (tail x)        
+  
 
-addAnimal x = do
-  let gosho = read x
-  animals ++ gosho
-
-main = do 
+start :: [Animal] -> IO()
+start animals = do 
   animalsFilteredByBloodType <- checkType animals allBloodTypes bloodType "No"
   
   animalsFilteredByAnimalType <- checkType animalsFilteredByBloodType allAnimalTypes animalType "No"
 
   answer <- checkAnimal animalsFilteredByAnimalType
 
-  -- let test = Animal { name = answer, bloodType = (bloodType current), animalType = (animalType current), questions = [] }
+  putStrLn "One more? (Yes/No)"
 
-  putStrLn (show (name answer))
+  oneMore <- getLine
+
+  if oneMore == "Yes"
+    then do
+      if (tail answer == [])
+        then do
+          start animals
+      else
+        start answer  
+  else
+    putStrLn "Bye!"
+
+main = start animals  
